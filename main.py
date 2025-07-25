@@ -1577,37 +1577,39 @@ class GoogleMapsScraper:
         if self.driver:
             self.driver.quit()
             logger.info("Driver closed")
-
-    def enrich_with_contact_details(self, businesses):
-        """Enrich businesses with contact details using secondary server"""
-        if not businesses:
-            return businesses
-        
-        try:
-            # Send businesses to contact details server
-            response = requests.post(
-                'http://127.0.0.1:5001/enrich',
-                json={'businesses': businesses},
-                timeout=60
-            )
             
-            if response.status_code == 200:
-                result = response.json()
-                if result.get('success'):
-                    logger.info(f"Successfully enriched {result.get('total_enriched', 0)} businesses with contact details")
-                    return result.get('businesses', businesses)
-                else:
-                    logger.warning("Contact details server returned error")
-            else:
-                logger.warning(f"Contact details server returned status {response.status_code}")
-                
-        except requests.exceptions.ConnectionError:
-            logger.warning("Contact details server not available, returning businesses without enrichment")
-        except Exception as e:
-            logger.error(f"Error enriching with contact details: {e}")
-        
+def enrich_with_contact_details(self, businesses):
+    """Enrich businesses with contact details using secondary server"""
+    if not businesses:
         return businesses
-
+    
+    try:
+        # Use environment variable for contact server URL
+        contact_url = os.environ.get('CONTACT_SERVER_URL', 'http://127.0.0.1:5001')
+        
+        # Send businesses to contact details server
+        response = requests.post(
+            f'{contact_url}/enrich',
+            json={'businesses': businesses},
+            timeout=60
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            if result.get('success'):
+                logger.info(f"Successfully enriched {result.get('total_enriched', 0)} businesses with contact details")
+                return result.get('businesses', businesses)
+            else:
+                logger.warning("Contact details server returned error")
+        else:
+            logger.warning(f"Contact details server returned status {response.status_code}")
+            
+    except requests.exceptions.ConnectionError:
+        logger.warning("Contact details server not available, returning businesses without enrichment")
+    except Exception as e:
+        logger.error(f"Error enriching with contact details: {e}")
+    
+    return businesses
 # Global scraper instance
 scraper = GoogleMapsScraper()
 
