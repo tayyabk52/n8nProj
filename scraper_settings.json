@@ -1,0 +1,15 @@
+{
+  "headless_mode": true,
+  "window_width": 1920,
+  "window_height": 1080,
+  "page_load_wait": 8.0,
+  "results_wait": 20,
+  "scroll_attempts": 15,
+  "scroll_delay": 2.0,
+  "extraction_delay": 0.3,
+  "max_retries": 3,
+  "default_zoom_level": 14,
+  "user_agent_rotation": true,
+  "enable_gpu": false,
+  "debug_mode": true
+}
