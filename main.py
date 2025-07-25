@@ -1757,6 +1757,7 @@ if __name__ == '__main__':
     logger.info("  POST /scrape - Scrape single location")
     logger.info("  POST /scrape-batch - Scrape multiple locations")
     logger.info("  POST /restart-driver - Restart Chrome driver")
-    
+    PORT = int(os.environ.get('PORT', 5000))
+    CONTACT_SERVER_URL = os.environ.get('CONTACT_SERVER_URL', 'http://127.0.0.1:5001')
     # Start the Flask server
     app.run(host='127.0.0.1', port=5000, debug=False, threaded=True)
