@@ -1588,12 +1588,9 @@ class GoogleMapsScraper:
             return businesses
         
         try:
-            # Use environment variable for contact server URL
-            contact_url = os.environ.get('CONTACT_SERVER_URL', 'http://127.0.0.1:5001')
-            
             # Send businesses to contact details server
             response = requests.post(
-                f'{contact_url}/enrich',
+                'http://127.0.0.1:5001/enrich',
                 json={'businesses': businesses},
                 timeout=60
             )
@@ -1765,6 +1762,5 @@ if __name__ == '__main__':
     logger.info("  POST /scrape-batch - Scrape multiple locations")
     logger.info("  POST /restart-driver - Restart Chrome driver")
     
-    # Use PORT from environment (Railway requirement)
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
+    # Start the Flask server
+    app.run(host='127.0.0.1', port=5000, debug=False, threaded=True)
